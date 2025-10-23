@@ -620,27 +620,27 @@
 
             <div id="consorcio" class="tab-content">
                 <div class="service-grid">
-                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de acessar as cartilhas do consórcio')">
+                    <div class="service-card" onclick="openLink('https://www.caixaconsorcio.com.br/consorcio/contemplacao')">
                         <span class="service-icon">📚</span>
                         <h3 class="service-title">Cartilhas</h3>
                     </div>
-                    <div class="service-card" onclick="handleService('whatsapp', 'Preciso consultar meus contratos')">
+                    <div class="service-card" onclick="openLink('https://www.caixaconsorcio.com.br/consorcio')">
                         <span class="service-icon">📄</span>
                         <h3 class="service-title">Contratos</h3>
                     </div>
-                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de receber dicas de educação financeira')">
+                    <div class="service-card" onclick="openLink('https://www.caixaconsorcio.com.br/consorcio/educacao-financeira')">
                         <span class="service-icon">💡</span>
                         <h3 class="service-title">Dicas de Educação Financeira</h3>
                     </div>
-                    <div class="service-card" onclick="handleService('whatsapp', 'Preciso de dicas de segurança para consórcio')">
+                    <div class="service-card" onclick="openLink('https://www.caixaconsorcio.com.br/consorcio/seguranca')">
                         <span class="service-icon">🛡️</span>
                         <h3 class="service-title">Dicas de Segurança</h3>
                     </div>
-                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de consultar o dicionário do consórcio')">
+                    <div class="service-card" onclick="openLink('https://static.caixaconsorcio.com.br/DicionarioDoConsorcio/Dicion%C3%A1rio%20Cons%C3%B3rcio%20-%20CAIXA%20Cons%C3%B3rcio%20-%20Final.pdf')">
                         <span class="service-icon">📖</span>
                         <h3 class="service-title">Dicionário do Consórcio</h3>
                     </div>
-                    <div class="service-card" onclick="openBlog()">
+                    <div class="service-card" onclick="openLink('https://blogcaixaconsorcio.com.br/')">
                         <span class="service-icon">📝</span>
                         <h3 class="service-title">Blog da CAIXA Consórcio</h3>
                     </div>
@@ -718,9 +718,6 @@
             <div class="modal-buttons">
                 <button class="modal-btn primary" onclick="openWebsite()">
                     🌐 Site Oficial
-                </button>
-                <button class="modal-btn secondary" onclick="openWhatsApp('Gostaria de falar com um consultor especializado')">
-                    👨‍💼 Consultor
                 </button>
                 <button class="modal-btn secondary" onclick="openWhatsApp('Preciso de informações sobre produtos CAIXA Consórcio')">
                     ℹ️ Informações
@@ -861,8 +858,8 @@
             closeModal();
         }
 
-        function openBlog() {
-            window.open('https://www.caixa.gov.br/consorcio/blog', '_blank', 'noopener,noreferrer');
+        function openLink(url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
 
         function showModal(modalId) {
@@ -904,5 +901,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99331b5da4181d1b',t:'MTc2MTI0MjE0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993360d2338402f2',t:'MTc2MTI0NDk4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
