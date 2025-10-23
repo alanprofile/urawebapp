@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAIXA Consórcio - Autoatendimento</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #FFFFFF;
+            color: #314889;
+            line-height: 1.5;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100%;
+            background: #FFFFFF;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #005CA9 0%, #00B5E5 100%);
+            padding: 20px 16px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 91, 169, 0.15);
+        }
+
+        .logo {
+            color: #FFFFFF;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .help-btn {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .help-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .tabs-container {
+            background: #FFFFFF;
+            border-bottom: 1px solid #D0E0E4;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            min-width: 100%;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px 12px;
+            text-align: center;
+            background: #FFFFFF;
+            border: none;
+            color: #314889;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        .tab.active {
+            color: #005CA9;
+            border-bottom-color: #F39200;
+            background: #f8fbff;
+        }
+
+        .tab:hover:not(.active) {
+            background: #f5f9ff;
+            color: #005CA9;
+        }
+
+        .content {
+            padding: 24px 16px 100px 16px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: linear-gradient(135deg, #005CA9 0%, #314889 100%);
+            padding: 12px 0;
+            box-shadow: 0 -2px 8px rgba(0, 91, 169, 0.2);
+            z-index: 100;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 8px;
+            min-width: 60px;
+        }
+
+        .footer-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .footer-item:active {
+            transform: translateY(0);
+        }
+
+        .footer-icon {
+            font-size: 20px;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-item:hover .footer-icon {
+            transform: scale(1.1);
+        }
+
+        .footer-label {
+            font-size: 10px;
+            color: #FFFFFF;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .service-card {
+            background: #FFFFFF;
+            border: 1px solid #D0E0E4;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(49, 72, 137, 0.08);
+            transform: translateY(0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 181, 229, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(49, 72, 137, 0.15);
+            border-color: #00B5E5;
+        }
+
+        .service-card:hover::before {
+            left: 100%;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            color: #00B5E5;
+        }
+
+        .service-card:hover .service-title {
+            color: #005CA9;
+        }
+
+        .service-card:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(49, 72, 137, 0.12);
+        }
+
+        .service-icon {
+            font-size: 32px;
+            color: #314889;
+            margin-bottom: 12px;
+            display: block;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1);
+        }
+
+        .service-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #314889;
+            margin: 0;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #F39200 0%, #ff9f1a 100%);
+            color: #FFFFFF;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(243, 146, 0, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(243, 146, 0, 0.4);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            color: #005CA9;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #D0E0E4;
+            border-top: 3px solid #00B5E5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(49, 72, 137, 0.8);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 32px 24px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(49, 72, 137, 0.3);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #314889;
+            margin: 0 0 16px 0;
+        }
+
+        .modal-text {
+            color: #314889;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateY(0);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-btn.primary {
+            background: #A6CE39;
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .modal-btn.primary:hover {
+            background: #8fb82f;
+            box-shadow: 0 4px 12px rgba(166, 206, 57, 0.4);
+        }
+
+        .modal-btn.secondary {
+            background: #005CA9;
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #004a8a;
+            box-shadow: 0 4px 12px rgba(0, 92, 169, 0.4);
+        }
+
+        .modal-btn.close {
+            background: transparent;
+            color: #314889;
+            border: 1px solid #D0E0E4;
+        }
+
+        .modal-btn.close:hover {
+            background: #f5f9ff;
+            border-color: #00B5E5;
+            color: #005CA9;
+            box-shadow: 0 4px 12px rgba(49, 72, 137, 0.15);
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, #f8fbff 0%, #e8f4ff 100%);
+            border: 1px solid #D0E0E4;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #005CA9;
+            margin: 0 0 8px 0;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: #314889;
+            margin: 0;
+        }
+
+        .bottom-sheet {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(49, 72, 137, 0.5);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .bottom-sheet.show {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .bottom-sheet-content {
+            background: #FFFFFF;
+            border-radius: 20px 20px 0 0;
+            padding: 32px 24px 40px 24px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 -8px 32px rgba(49, 72, 137, 0.3);
+            transform: translateY(100%);
+            animation: slideUp 0.3s ease forwards;
+            max-height: 50vh;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .bottom-sheet-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #005CA9 0%, #00B5E5 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .bottom-sheet-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #314889;
+            margin: 0 0 24px 0;
+        }
+
+        .bottom-sheet-options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bottom-sheet-option {
+            background: #FFFFFF;
+            border: 1px solid #D0E0E4;
+            border-radius: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bottom-sheet-option:hover {
+            background: #f8fbff;
+            border-color: #00B5E5;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(49, 72, 137, 0.1);
+        }
+
+        .bottom-sheet-option-icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .bottom-sheet-option-text {
+            flex: 1;
+            color: #314889;
+            font-size: 14px;
+        }
+
+        .bottom-sheet-option-highlight {
+            font-size: 16px;
+            font-weight: bold;
+            color: #005CA9;
+        }
+
+        @media (max-width: 480px) {
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .tab {
+                font-size: 12px;
+                padding: 14px 8px;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="logo">CAIXA Consórcio</h1>
+            <button class="help-btn" onclick="openHelp()">❓</button>
+        </header>
+
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('servicos', this)">
+                    🔹 Serviços
+                </button>
+                <button class="tab" onclick="switchTab('consorcio', this)">
+                    🔹 Consórcio
+                </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="welcome-message">
+                <h2 class="welcome-title">Bem-vindo ao Autoatendimento</h2>
+                <p class="welcome-text">Escolha o serviço que precisa e resolva rapidamente</p>
+            </div>
+
+            <div id="servicos" class="tab-content active">
+                <div class="service-grid">
+                    <div class="service-card" onclick="handleService('app', 'consorcio')">
+                        <span class="service-icon">🏠</span>
+                        <h3 class="service-title">Meu Consórcio</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('app', 'boleto')">
+                        <span class="service-icon">📋</span>
+                        <h3 class="service-title">Emitir Boleto</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('app', 'extrato')">
+                        <span class="service-icon">📊</span>
+                        <h3 class="service-title">Ver Extrato</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('app', 'contemplacao')">
+                        <span class="service-icon">✅</span>
+                        <h3 class="service-title">Confirmar Contemplação</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('app', 'lance')">
+                        <span class="service-icon">🎯</span>
+                        <h3 class="service-title">Dar Lance</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de registrar uma solicitação')">
+                        <span class="service-icon">📝</span>
+                        <h3 class="service-title">Registrar Solicitação</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('whatsapp', 'Preciso de informações sobre uso do crédito')">
+                        <span class="service-icon">💳</span>
+                        <h3 class="service-title">Uso do Crédito</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('app', 'ir')">
+                        <span class="service-icon">📑</span>
+                        <h3 class="service-title">Informe de Rendimentos</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div id="consorcio" class="tab-content">
+                <div class="service-grid">
+                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de acessar as cartilhas do consórcio')">
+                        <span class="service-icon">📚</span>
+                        <h3 class="service-title">Cartilhas</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('whatsapp', 'Preciso consultar meus contratos')">
+                        <span class="service-icon">📄</span>
+                        <h3 class="service-title">Contratos</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de receber dicas de educação financeira')">
+                        <span class="service-icon">💡</span>
+                        <h3 class="service-title">Dicas de Educação Financeira</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('whatsapp', 'Preciso de dicas de segurança para consórcio')">
+                        <span class="service-icon">🛡️</span>
+                        <h3 class="service-title">Dicas de Segurança</h3>
+                    </div>
+                    <div class="service-card" onclick="handleService('whatsapp', 'Gostaria de consultar o dicionário do consórcio')">
+                        <span class="service-icon">📖</span>
+                        <h3 class="service-title">Dicionário do Consórcio</h3>
+                    </div>
+                    <div class="service-card" onclick="openBlog()">
+                        <span class="service-icon">📝</span>
+                        <h3 class="service-title">Blog da CAIXA Consórcio</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Conectando você ao atendimento...</p>
+            </div>
+        </div>
+
+        <!-- Rodapé fixo -->
+        <footer class="footer">
+            <nav class="footer-nav">
+                <div class="footer-item" onclick="showPhoneOptions()">
+                    <span class="footer-icon">📞</span>
+                    <span class="footer-label">Fone</span>
+                </div>
+                <div class="footer-item" onclick="openWhatsApp('Olá! Preciso de ajuda com meus serviços CAIXA Consórcio')">
+                    <span class="footer-icon">💬</span>
+                    <span class="footer-label">WhatsApp</span>
+                </div>
+                <div class="footer-item" onclick="openApp('home')">
+                    <span class="footer-icon">📱</span>
+                    <span class="footer-label">App</span>
+                </div>
+                <div class="footer-item" onclick="showMoreOptions()">
+                    <span class="footer-icon">⋯</span>
+                    <span class="footer-label">Mais</span>
+                </div>
+            </nav>
+        </footer>
+    </div>
+
+    <!-- Modal para App não instalado -->
+    <div class="modal" id="appModal">
+        <div class="modal-content">
+            <h3 class="modal-title">App CAIXA Consórcio</h3>
+            <p class="modal-text">Para continuar, você precisa do app oficial. Baixe gratuitamente:</p>
+            <div class="modal-buttons">
+                <a href="https://play.google.com/store/apps/details?id=com.autoatendimentomobile_caixa" target="_blank" class="modal-btn primary">
+                    📱 Play Store
+                </a>
+                <a href="https://apps.apple.com/br/app/caixa-cons%C3%B3rcio/id6599848539" target="_blank" class="modal-btn secondary">
+                    🍎 App Store
+                </a>
+                <button class="modal-btn close" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Como posso ajudar?</h3>
+            <p class="modal-text">Escolha uma das opções abaixo para falar com nosso atendimento:</p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="openWhatsApp('Preciso de ajuda com o autoatendimento')">
+                    💬 WhatsApp
+                </button>
+                <button class="modal-btn secondary" onclick="callPhone()">
+                    📞 Ligar (4004-0104)
+                </button>
+                <button class="modal-btn close" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Mais Opções -->
+    <div class="modal" id="moreModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Mais Opções</h3>
+            <p class="modal-text">Acesse outros canais de atendimento e informações:</p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="openWebsite()">
+                    🌐 Site Oficial
+                </button>
+                <button class="modal-btn secondary" onclick="openWhatsApp('Gostaria de falar com um consultor especializado')">
+                    👨‍💼 Consultor
+                </button>
+                <button class="modal-btn secondary" onclick="openWhatsApp('Preciso de informações sobre produtos CAIXA Consórcio')">
+                    ℹ️ Informações
+                </button>
+                <button class="modal-btn close" onclick="closeModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Sheet para Opções de Telefone -->
+    <div class="bottom-sheet" id="phoneBottomSheet">
+        <div class="bottom-sheet-content">
+            <div class="bottom-sheet-logo">
+                CAIXA
+            </div>
+            <h3 class="bottom-sheet-title">Como prefere continuar?</h3>
+            <div class="bottom-sheet-options">
+                <div class="bottom-sheet-option" onclick="selectPhoneOption('whatsapp')">
+                    <span class="bottom-sheet-option-icon">💬</span>
+                    <div class="bottom-sheet-option-text">
+                        Seguir atendimento pelo <span class="bottom-sheet-option-highlight">WhatsApp</span>
+                    </div>
+                </div>
+                <div class="bottom-sheet-option" onclick="selectPhoneOption('chat')">
+                    <span class="bottom-sheet-option-icon">💭</span>
+                    <div class="bottom-sheet-option-text">
+                        Seguir atendimento pelo <span class="bottom-sheet-option-highlight">Chat</span>
+                    </div>
+                </div>
+                <div class="bottom-sheet-option" onclick="selectPhoneOption('telefone')">
+                    <span class="bottom-sheet-option-icon">📞</span>
+                    <div class="bottom-sheet-option-text">
+                        Seguir atendimento pelo <span class="bottom-sheet-option-highlight">Telefone</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName, element) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            element.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function handleService(type, action) {
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                
+                if (type === 'whatsapp') {
+                    openWhatsApp(action);
+                } else if (type === 'app') {
+                    openApp(action);
+                }
+            }, 800);
+        }
+
+        function openWhatsApp(message) {
+            const phoneNumber = '5511999999999'; // Número oficial do WhatsApp CAIXA Consórcio
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        function openApp(section) {
+            // Tenta abrir o app oficial
+            const deepLink = `caixaconsorcio://abrir?secao=${section}`;
+            
+            // Cria um link temporário para tentar abrir o app
+            const link = document.createElement('a');
+            link.href = deepLink;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            
+            // Tenta abrir o app
+            try {
+                link.click();
+                
+                // Se não conseguir abrir em 2 segundos, mostra modal para download
+                setTimeout(() => {
+                    showModal('appModal');
+                }, 2000);
+                
+            } catch (error) {
+                showModal('appModal');
+            }
+            
+            document.body.removeChild(link);
+        }
+
+        function openHelp() {
+            showModal('helpModal');
+        }
+
+        function callPhone() {
+            window.open('tel:40040104', '_self');
+            closeModal();
+        }
+
+        function showPhoneOptions() {
+            document.getElementById('phoneBottomSheet').classList.add('show');
+        }
+
+        function selectPhoneOption(option) {
+            closeBottomSheet();
+            
+            switch(option) {
+                case 'whatsapp':
+                    openWhatsApp('Olá! Gostaria de ser atendido pelo WhatsApp');
+                    break;
+                case 'chat':
+                    // Simula abertura do chat online
+                    window.open('https://www.caixa.gov.br/atendimento/chat', '_blank', 'noopener,noreferrer');
+                    break;
+                case 'telefone':
+                    callPhone();
+                    break;
+            }
+        }
+
+        function closeBottomSheet() {
+            document.getElementById('phoneBottomSheet').classList.remove('show');
+        }
+
+        function showMoreOptions() {
+            showModal('moreModal');
+        }
+
+        function openWebsite() {
+            window.open('https://www.caixa.gov.br/consorcio', '_blank', 'noopener,noreferrer');
+            closeModal();
+        }
+
+        function openBlog() {
+            window.open('https://www.caixa.gov.br/consorcio/blog', '_blank', 'noopener,noreferrer');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('show');
+            });
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.add('show');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('show');
+        }
+
+        // Fecha modal ao clicar fora dele
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
+            if (event.target.classList.contains('bottom-sheet')) {
+                closeBottomSheet();
+            }
+        });
+
+        // Previne scroll horizontal desnecessário
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsContainer = document.querySelector('.tabs-container');
+            let isScrolling = false;
+            
+            tabsContainer.addEventListener('scroll', function() {
+                isScrolling = true;
+                setTimeout(() => isScrolling = false, 100);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99331b5da4181d1b',t:'MTc2MTI0MjE0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
